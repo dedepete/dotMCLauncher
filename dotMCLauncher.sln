@@ -1,0 +1,52 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "dotMCLauncher.Profiling", "src\dotMCLauncher.Profiling\dotMCLauncher.Profiling.csproj", "{39481F27-537E-4AE3-B58F-92E364535731}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "dotMCLauncher.Versioning", "src\dotMCLauncher.Versioning\dotMCLauncher.Versioning.csproj", "{E41644A8-2949-4CC3-B1B1-CEBF32B055A2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "dotMCLauncher.Yggdrasil", "src\dotMCLauncher.Yggdrasil\dotMCLauncher.Yggdrasil.csproj", "{2C82A4FF-1672-48C6-A2A6-E9E30E8449D4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "dotMCLauncher.Resourcing", "src\dotMCLauncher.Resourcing\dotMCLauncher.Resourcing.csproj", "{EA695878-5109-467B-91E1-FE86CEBD7A22}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "dotMCLauncher.Tests", "src\dotMCLauncher.Tests\dotMCLauncher.Tests.csproj", "{AF6A3003-A1DA-4B40-A513-DB021158D310}"
+	ProjectSection(ProjectDependencies) = postProject
+		{39481F27-537E-4AE3-B58F-92E364535731} = {39481F27-537E-4AE3-B58F-92E364535731}
+		{EA695878-5109-467B-91E1-FE86CEBD7A22} = {EA695878-5109-467B-91E1-FE86CEBD7A22}
+		{E41644A8-2949-4CC3-B1B1-CEBF32B055A2} = {E41644A8-2949-4CC3-B1B1-CEBF32B055A2}
+		{2C82A4FF-1672-48C6-A2A6-E9E30E8449D4} = {2C82A4FF-1672-48C6-A2A6-E9E30E8449D4}
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{39481F27-537E-4AE3-B58F-92E364535731}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{39481F27-537E-4AE3-B58F-92E364535731}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{39481F27-537E-4AE3-B58F-92E364535731}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{39481F27-537E-4AE3-B58F-92E364535731}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E41644A8-2949-4CC3-B1B1-CEBF32B055A2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E41644A8-2949-4CC3-B1B1-CEBF32B055A2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E41644A8-2949-4CC3-B1B1-CEBF32B055A2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E41644A8-2949-4CC3-B1B1-CEBF32B055A2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2C82A4FF-1672-48C6-A2A6-E9E30E8449D4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2C82A4FF-1672-48C6-A2A6-E9E30E8449D4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2C82A4FF-1672-48C6-A2A6-E9E30E8449D4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2C82A4FF-1672-48C6-A2A6-E9E30E8449D4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EA695878-5109-467B-91E1-FE86CEBD7A22}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EA695878-5109-467B-91E1-FE86CEBD7A22}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EA695878-5109-467B-91E1-FE86CEBD7A22}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EA695878-5109-467B-91E1-FE86CEBD7A22}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AF6A3003-A1DA-4B40-A513-DB021158D310}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AF6A3003-A1DA-4B40-A513-DB021158D310}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AF6A3003-A1DA-4B40-A513-DB021158D310}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AF6A3003-A1DA-4B40-A513-DB021158D310}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
