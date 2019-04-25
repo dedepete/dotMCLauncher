@@ -32,6 +32,10 @@ namespace dotMCLauncher.Versioning
                 return false;
             }
 
+            if (conditions == null) {
+                return false;
+            }
+
             foreach (KeyValuePair<string, bool?> keyValue in ToDictionary()) {
                 if (!conditions.ToDictionary().Contains(keyValue)) {
                     return false;

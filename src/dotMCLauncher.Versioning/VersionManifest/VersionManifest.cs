@@ -61,6 +61,8 @@ namespace dotMCLauncher.Versioning
         /// </summary>
         public string Assets { get; set; }
 
+        public DownloadEntry AssetIndex { get; set; }
+
         /// <summary>
         /// Main class.
         /// </summary>
@@ -114,12 +116,6 @@ namespace dotMCLauncher.Versioning
         /// </summary>
         [JsonIgnore]
         public List<ArgumentsGroup> ArgumentsGroups { get; set; }
-
-        [JsonIgnore]
-        public string GetClientDownloadUrl
-            =>
-                Downloads?.Client?.Url ??
-                $@"https://s3.amazonaws.com/Minecraft.Download/versions/{VersionId}/{VersionId}.jar";
 
         /// <summary>
         /// Parses build's JSON file.
@@ -200,7 +196,7 @@ namespace dotMCLauncher.Versioning
             return versionManifest != null;
         }
 
-        public string GetAssetsIndex()
+        public string GetBaseAssetsId()
         {
             if (!string.IsNullOrEmpty(Assets)) {
                 return Assets;
@@ -222,6 +218,28 @@ namespace dotMCLauncher.Versioning
             return "legacy";
         }
 
+        public DownloadEntry GetBaseAssetIndex()
+        {
+            if (AssetIndex != null) {
+                return AssetIndex;
+            }
+
+            VersionManifest manifest = InheritableVersionManifest;
+            while (true) {
+                if (manifest?.InheritsFrom == null) {
+                    if (manifest?.Assets != null) {
+                        return manifest.AssetIndex;
+                    }
+
+                    break;
+                }
+
+                manifest = manifest.InheritableVersionManifest;
+            }
+
+            return null;
+        }
+
         public string GetBaseJar()
         {
             return InheritsFrom == null ? VersionId : InheritableVersionManifest.GetBaseJar();
@@ -239,6 +257,14 @@ namespace dotMCLauncher.Versioning
 
             return toReturn;
         }
+
+        public string GetClientDownloadUrl()
+            =>
+                Downloads?.Client?.Url ??
+                $@"https://s3.amazonaws.com/Minecraft.Download/versions/{VersionId}/{VersionId}.jar";
+
+        public string GetAssetsIndexDownloadUrl()
+            => GetBaseAssetIndex()?.Url ?? $"https://s3.amazonaws.com/Minecraft.Download/indexes/{Assets ?? "legacy"}.json";
     }
 
     public class VersionNotFound : Exception

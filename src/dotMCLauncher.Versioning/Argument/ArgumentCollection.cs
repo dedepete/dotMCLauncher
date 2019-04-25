@@ -7,7 +7,7 @@ namespace dotMCLauncher.Versioning
 {
     public class ArgumentCollection : Dictionary<string, List<string>>
     {
-        private string _argLine;
+        private string _argLine { get; set; }
 
         /// <summary>
         /// Parses string.

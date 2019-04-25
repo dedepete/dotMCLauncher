@@ -8,88 +8,87 @@ using Newtonsoft.Json.Serialization;
 
 namespace dotMCLauncher.Profiling
 {
-    [JsonObject(NamingStrategyType = typeof(CamelCaseNamingStrategy), MemberSerialization = MemberSerialization.OptOut)]
+    [JsonObject(NamingStrategyType = typeof(CamelCaseNamingStrategy), MemberSerialization = MemberSerialization.OptIn)]
     public class ProfileManager : JsonSerializable, IEnumerable<LauncherProfile>, IDictionary<string, LauncherProfile>
     {
+        public ProfileManager()
+        {
+            _profiles = new Dictionary<string, LauncherProfile>();
+        }
+
         /// <summary>
         /// Last used profile's id. 
         /// </summary>
+        [JsonProperty]
         public string SelectedProfile { get; set; }
 
-        [JsonProperty]
-        private IList<KeyValuePair<string, LauncherProfile>> Profiles { get; set; }
-
         [JsonProperty("profiles")]
-        private Dictionary<string, LauncherProfile> _profiles
-        {
-            get {
-                if (Profiles == null || !Profiles.Any()) {
-                    return null;
-                }
-
-                return Profiles.ToDictionary(pair => pair.Key, pair => pair.Value);
-            }
-            set => Profiles = value.ToList();
-        }
+        private Dictionary<string, LauncherProfile> _profiles { get; set; }
 
         /// <summary>
         /// Launcher settings. 
         /// </summary>
+        [JsonProperty]
         public Dictionary<string, object> Settings { get; set; }
 
         /// <summary>
         /// Launcher version. 
         /// </summary>
+        [JsonProperty]
         public LauncherVersion LauncherVersion { get; set; }
 
         /// <summary>
         /// Authentication database. 
         /// </summary>
+        [JsonProperty]
         public Dictionary<string, AuthenticationEntry> AuthenticationDatabase { get; set; }
 
         /// <summary>
         /// Last used entry from authentication database. 
         /// </summary>
+        [JsonProperty]
         public SelectedUser SelectedUser { get; set; }
 
         /// <summary>
         /// Analytics token. I don't like analytics. Why do u even need this field?
         /// </summary>
+        [JsonProperty]
         public string AnalyticsToken { get; set; }
 
         /// <summary>
         /// Analytics failcount. Mojang are watching us!
         /// </summary>
+        [JsonProperty]
         public int AnalyticsFailcount { get; set; }
 
         /// <summary>
         /// Client token.
         /// </summary>
+        [JsonProperty]
         public string ClientToken { get; set; }
 
         public void Clear()
-        {
-            Profiles.Clear();
-        }
+            => _profiles.Clear();
 
         public bool Contains(KeyValuePair<string, LauncherProfile> item)
-        {
-            return Profiles.Contains(item);
-        }
+            => _profiles.Contains(item);
 
         public void CopyTo(KeyValuePair<string, LauncherProfile>[] array, int arrayIndex)
         {
-            Profiles.CopyTo(array, arrayIndex);
+            KeyValuePair<string, LauncherProfile>[] profilesArray = _profiles.ToArray();
+            profilesArray.CopyTo(array, arrayIndex);
+            _profiles = profilesArray.ToDictionary(key => key.Key, value => value.Value);
         }
 
-        public int Count => Profiles.Count;
-        public bool IsReadOnly => Profiles.IsReadOnly;
-        public ICollection<string> Keys => Profiles.ToDictionary(entry => entry.Key, entry => entry.Value).Keys;
-        public ICollection<LauncherProfile> Values => Profiles.ToDictionary(entry => entry.Key, entry => entry.Value).Values;
+        public int Count => _profiles.Count;
+        public bool IsReadOnly => false;
+        public ICollection<string> Keys => _profiles.Keys;
+        public ICollection<LauncherProfile> Values => _profiles.Values;
 
         public void Add(KeyValuePair<string, LauncherProfile> item)
         {
-            Profiles.Add(item);
+            item.Value.Id = item.Key;
+            Add(item.Key, item.Value);
         }
 
         public void Add(LauncherProfile profile)
@@ -98,7 +97,17 @@ namespace dotMCLauncher.Profiling
                 profile.Id = Guid.NewGuid().ToString();
             } while (string.IsNullOrWhiteSpace(profile.Id) || ContainsKey(profile.Id));
 
-            Add(new KeyValuePair<string, LauncherProfile>(profile.Id, profile));
+            Add(profile.Id, profile);
+        }
+
+        public void Add(LauncherProfile profile, out string id)
+        {
+            do {
+                profile.Id = Guid.NewGuid().ToString();
+            } while (string.IsNullOrWhiteSpace(profile.Id) || ContainsKey(profile.Id));
+
+            Add(profile.Id, profile);
+            id = profile.Id;
         }
 
         public void Add(string id, LauncherProfile profile)
@@ -112,33 +121,25 @@ namespace dotMCLauncher.Profiling
             }
 
             profile.Id = id;
-            Add(new KeyValuePair<string, LauncherProfile>(profile.Id, profile));
+            _profiles.Add(profile.Id, profile);
         }
 
-        public bool ContainsKey(string key)
-        {
-            return Keys.Contains(key);
-        }
+        public bool ContainsKey(string id)
+            => Keys.Contains(id);
 
-        public bool Remove(KeyValuePair<string, LauncherProfile> item)
-        {
-            return Profiles.Remove(item);
-        }
+        public bool Remove(KeyValuePair<string, LauncherProfile> pair)
+            => _profiles.Remove(pair.Key);
 
         public bool Remove(LauncherProfile launcherProfile)
-        {
-            return Remove(launcherProfile.Id);
-        }
+            => Remove(launcherProfile.Id);
 
         public bool Remove(string id)
-        {
-            return Remove(Profiles.FirstOrDefault(entry => entry.Key == id));
-        }
+            => Remove(_profiles.FirstOrDefault(entry => entry.Key == id));
 
-        public bool TryGetValue(string key, out LauncherProfile value)
+        public bool TryGetValue(string id, out LauncherProfile value)
         {
             try {
-                value = Profiles.First(entry => entry.Key == key).Value;
+                value = _profiles.First(entry => entry.Key == id).Value;
                 return true;
             }
             catch {
@@ -151,7 +152,7 @@ namespace dotMCLauncher.Profiling
         {
             get { return Values.FirstOrDefault(entry => entry.Id == id); }
             set {
-                Profiles.Remove(Profiles.First(entry => entry.Key == id));
+                Remove(id);
                 Add(id, value);
             }
         }
@@ -167,40 +168,30 @@ namespace dotMCLauncher.Profiling
                 newProfiles.Add(profile.Id, profile);
             }
 
-            Profiles = newProfiles.ToList();
+            _profiles = newProfiles;
         }
 
         public static ProfileManager Parse(string rawJsonProfileList)
-        {
-            return JsonConvert.DeserializeObject<ProfileManager>(rawJsonProfileList);
-        }
+            => JsonConvert.DeserializeObject<ProfileManager>(rawJsonProfileList);
 
         private void AssociateIds()
         {
-            foreach (KeyValuePair<string, LauncherProfile> pair in Profiles) {
+            foreach (KeyValuePair<string, LauncherProfile> pair in _profiles) {
                 pair.Value.Id = pair.Key;
             }
         }
 
         [OnDeserialized]
         private void OnDeserialized(StreamingContext context)
-        {
-            AssociateIds();
-        }
+            => AssociateIds();
 
         IEnumerator<KeyValuePair<string, LauncherProfile>> IEnumerable<KeyValuePair<string, LauncherProfile>>.GetEnumerator()
-        {
-            return Profiles.GetEnumerator();
-        }
+            => _profiles.GetEnumerator();
 
         public IEnumerator<LauncherProfile> GetEnumerator()
-        {
-            return Values.GetEnumerator();
-        }
+            => Values.GetEnumerator();
 
         IEnumerator IEnumerable.GetEnumerator()
-        {
-            return GetEnumerator();
-        }
+            => GetEnumerator();
     }
 }

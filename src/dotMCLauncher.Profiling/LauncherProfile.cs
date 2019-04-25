@@ -4,62 +4,67 @@ using Newtonsoft.Json.Serialization;
 
 namespace dotMCLauncher.Profiling
 {
-    [JsonObject(NamingStrategyType = typeof(CamelCaseNamingStrategy), MemberSerialization = MemberSerialization.OptOut)]
+    [JsonObject(NamingStrategyType = typeof(CamelCaseNamingStrategy), MemberSerialization = MemberSerialization.OptIn)]
     public class LauncherProfile : JsonSerializable
     {
-        internal string Id { get; set; }
+        [JsonIgnore]
+        public string Id { get; internal set; }
 
+        [JsonProperty]
         public string Name { get; set; }
 
-        [JsonProperty]
-        private string _icon { get; set; }
-
-        [JsonIgnore]
-        public LauncherProfileIcon.Icon Icon
+        [JsonProperty("icon")]
+        private string _icon
         {
-            get => LauncherProfileIcon.GetIcon(_icon);
-            set => _icon = LauncherProfileIcon.GetString(value);
+            get => LauncherProfileIcon.GetString(Icon);
+            set => Icon = LauncherProfileIcon.GetIcon(value);
         }
 
-        [JsonProperty]
-        private string _type { get; set; }
-
         [JsonIgnore]
-        public LauncherProfileType Type
+        public LauncherProfileIcon.Icon Icon { get; set; } = LauncherProfileIcon.Icon.BEDROCK;
+
+        [JsonProperty("type")]
+        private string _type
         {
             get {
-                switch (_type) {
-                    case "latest-release":
-                        return LauncherProfileType.LATEST_RELEASE;
-                    case "latest-snapshot":
-                        return LauncherProfileType.LATEST_SNAPSHOT;
+                switch (Type) {
+                    case LauncherProfileType.LATEST_RELEASE:
+                        return "latest-release";
+                    case LauncherProfileType.LATEST_SNAPSHOT:
+                        return "latest-snapshot";
                     default:
-                        return LauncherProfileType.CUSTOM;
+                        return "custom";
                 }
             }
             set {
-                // ReSharper disable once SwitchStatementMissingSomeCases
                 switch (value) {
-                    case LauncherProfileType.LATEST_RELEASE:
-                        _type = "latest-release";
+                    case "latest-release":
+                        Type = LauncherProfileType.LATEST_RELEASE;
                         break;
-                    case LauncherProfileType.LATEST_SNAPSHOT:
-                        _type = "latest-snapshot";
+                    case "latest-snapshot":
+                        Type = LauncherProfileType.LATEST_SNAPSHOT;
                         break;
                     default:
-                        _type = "custom";
+                        Type = LauncherProfileType.CUSTOM;
                         break;
                 }
             }
         }
 
+        [JsonIgnore]
+        public LauncherProfileType Type { get; set; } = LauncherProfileType.LATEST_RELEASE;
+
+        [JsonProperty]
         public string LastVersionId { get; set; }
 
+        [JsonProperty]
         public LauncherProfileResolution Resolution { get; set; }
 
-        public DateTime Created { get; set; } = new DateTime(1970, 1, 1, 0, 0, 0);
+        [JsonProperty]
+        public DateTime Created { get; set; } = DateTime.Now;
 
-        public DateTime LastUsed { get; set; } = new DateTime(1970, 1, 1, 0, 0, 0);
+        [JsonProperty]
+        public DateTime LastUsed { get; set; } = DateTime.Now;
 
         [JsonProperty("gameDir")]
         public string GameDirectory { get; set; }
@@ -75,5 +80,8 @@ namespace dotMCLauncher.Profiling
 
         [JsonProperty("logConfigIsXML", DefaultValueHandling = DefaultValueHandling.Ignore)]
         public bool IsLogConfigurationXml { get; set; }
+
+        public override string ToString()
+            => Name;
     }
 }

@@ -74,11 +74,14 @@ namespace dotMCLauncher.Versioning
                 foreach (DownloadEntry downloadEntry in DownloadInfo.GetDownloadsEntries(IsNatives && operatingSystem != null && Natives.ContainsKey(operatingSystem)
                     ? Natives[operatingSystem].Replace("${arch}", is64BitArchitecture ? "64" : "32")
                     : null)) {
+                    if (downloadEntry.Path == null) {
+                        downloadEntry.Path = GetPath(operatingSystem, is64BitArchitecture);
+                    }
                     entries.Add(downloadEntry);
                 }
             } else {
                 entries.Add(new DownloadEntry {
-                    Url = Url ?? baseRepository + GetPath(operatingSystem), Path = GetPath(), IsNatives = IsNatives
+                    Url = (Url ?? baseRepository) + GetPath(operatingSystem, is64BitArchitecture), Path = GetPath(), IsNatives = IsNatives
                 });
             }
 

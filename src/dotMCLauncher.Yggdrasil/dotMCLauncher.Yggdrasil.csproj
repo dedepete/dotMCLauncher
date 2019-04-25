@@ -7,8 +7,8 @@
     <ProjectGuid>{2C82A4FF-1672-48C6-A2A6-E9E30E8449D4}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>RuLauncher.Yggdrasil</RootNamespace>
-    <AssemblyName>RuLauncher.Yggdrasil</AssemblyName>
+    <RootNamespace>dotMCLauncher.Yggdrasil</RootNamespace>
+    <AssemblyName>dotMCLauncher.Yggdrasil</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>

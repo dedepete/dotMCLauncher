@@ -49,7 +49,7 @@ namespace dotMCLauncher.Versioning
 
             foreach (Match match in re.Matches(toReturn.ToString())) {
                 if (values?.ContainsKey(match.Groups[1].Value) == true && values[match.Groups[1].Value] != null) {
-                    toReturn.Replace(match.Groups[1].Value, !values[match.Groups[1].Value].Contains(' ')
+                    toReturn.Replace(match.Value, !values[match.Groups[1].Value].Contains(' ')
                         ? values[match.Groups[1].Value]
                         : $"\"{values[match.Groups[1].Value]}\"");
                 } else {
