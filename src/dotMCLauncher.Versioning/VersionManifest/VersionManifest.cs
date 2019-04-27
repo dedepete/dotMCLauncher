@@ -247,8 +247,7 @@ namespace dotMCLauncher.Versioning
 
         public string BuildArgumentsByGroup(ArgumentsGroupType group, Dictionary<string, string> jvmArgumentDictionary, RuleConditions conditions)
         {
-            string toReturn = ArgumentsGroups?.FirstOrDefault(
-                                      ag => ag.Type == group)?
+            string toReturn = ArgumentsGroups?.FirstOrDefault(ag => ag.Type == group)?
                                   .ToString(jvmArgumentDictionary, conditions) ?? string.Empty;
             if (InheritableVersionManifest != null && InheritableVersionManifest.Type == VersionManifestType.V2) {
                 toReturn = (toReturn == string.Empty ? string.Empty : toReturn + " ") +

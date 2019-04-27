@@ -17,10 +17,17 @@ namespace dotMCLauncher.Profiling
         }
 
         /// <summary>
-        /// Last used profile's id. 
+        /// Last used profile's id.
         /// </summary>
+        /// <returns>Presetted id, first available's profile id, <c>Null</c> if none is available.</returns>
         [JsonProperty]
-        public string SelectedProfile { get; set; }
+        public string SelectedProfile
+        {
+            get => _selectedProfile ?? Values.FirstOrDefault()?.Id;
+            set => _selectedProfile = value ?? Values.FirstOrDefault().Id;
+        }
+        
+        private string _selectedProfile { get; set; }
 
         [JsonProperty("profiles")]
         private Dictionary<string, LauncherProfile> _profiles { get; set; }
@@ -130,11 +137,14 @@ namespace dotMCLauncher.Profiling
         public bool Remove(KeyValuePair<string, LauncherProfile> pair)
             => _profiles.Remove(pair.Key);
 
+        public bool Remove(string id, LauncherProfile launcherProfile)
+            => Remove(_profiles.FirstOrDefault(pair => pair.Key == id && pair.Value == launcherProfile));
+
         public bool Remove(LauncherProfile launcherProfile)
-            => Remove(launcherProfile.Id);
+            => Remove(launcherProfile.Id, launcherProfile);
 
         public bool Remove(string id)
-            => Remove(_profiles.FirstOrDefault(entry => entry.Key == id));
+            => Remove(_profiles.First(entry => entry.Key == id));
 
         public bool TryGetValue(string id, out LauncherProfile value)
         {
