@@ -18,22 +18,25 @@ namespace dotMCLauncher.Versioning
             foreach (Argument argument in Arguments) {
                 switch (argument.Type) {
                     case ArgumentType.SINGLE:
-                        toReturn.Append((argument as SingleArgument).Value + " ");
+                        toReturn.Append((argument as SingleArgument)?.Value + " ");
                         break;
-                    case ArgumentType.EXTENDED:
-                        ExtendedArgument extendedArgument = argument as ExtendedArgument;
-                        if (!extendedArgument.IsAllowed(conditions)) {
+                    case ArgumentType.MULTIPLE:
+                        if (!(argument is MultipleArgument multipleArgument)) {
+                            break;
+                        }
+
+                        if (!multipleArgument.IsAllowed(conditions)) {
                             continue;
                         }
 
-                        if (!extendedArgument.HasMultipleArguments) {
-                            toReturn.Append((extendedArgument.Value.Contains(' ')
-                                                ? "\"" + extendedArgument.Value + "\""
-                                                : extendedArgument.Value) + " ");
+                        if (!multipleArgument.HasMultipleArguments) {
+                            toReturn.Append((multipleArgument.Value.Contains(' ')
+                                                ? "\"" + multipleArgument.Value + "\""
+                                                : multipleArgument.Value) + " ");
                             continue;
                         }
 
-                        toReturn = extendedArgument.Values.Aggregate(toReturn,
+                        toReturn = multipleArgument.Values.Aggregate(toReturn,
                             (current, value) =>
                                 toReturn.Append((Type == ArgumentsGroupType.JVM && value.Contains(' ')
                                                     ? "\"" + value + "\""

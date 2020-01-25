@@ -19,14 +19,16 @@ namespace dotMCLauncher.Profiling
         /// <summary>
         /// Last used profile's id.
         /// </summary>
-        /// <returns>Presetted id, first available's profile id, <c>Null</c> if none is available.</returns>
-        [JsonProperty]
+        /// <returns>Presetted id, first available's profile id or <c>Null</c> if none is available.</returns>
+        [Obsolete(
+            "This property is not being used in official launcher any longer and will be removed in next release. Use GetLastUsedProfile() and property LastUsed of each profile instead.",
+            true)]
         public string SelectedProfile
         {
             get => _selectedProfile ?? Values.FirstOrDefault()?.Id;
-            set => _selectedProfile = value ?? Values.FirstOrDefault().Id;
+            set => _selectedProfile = value ?? Values.FirstOrDefault()?.Id;
         }
-        
+
         private string _selectedProfile { get; set; }
 
         [JsonProperty("profiles")]
@@ -59,12 +61,14 @@ namespace dotMCLauncher.Profiling
         /// <summary>
         /// Analytics token. I don't like analytics. Why do u even need this field?
         /// </summary>
+        [Obsolete("This property is not being used in official launcher any longer and will be removed in next release.", true)]
         [JsonProperty]
         public string AnalyticsToken { get; set; }
 
         /// <summary>
         /// Analytics failcount. Mojang are watching us!
         /// </summary>
+        [Obsolete("This property is not being used in official launcher any longer and will be removed in next release.", true)]
         [JsonProperty]
         public int AnalyticsFailcount { get; set; }
 
@@ -72,7 +76,7 @@ namespace dotMCLauncher.Profiling
         /// Client token.
         /// </summary>
         [JsonProperty]
-        public string ClientToken { get; set; }
+        public string ClientToken { get; set; } = GetNewClientToken();
 
         public void Clear()
             => _profiles.Clear();
@@ -151,8 +155,7 @@ namespace dotMCLauncher.Profiling
             try {
                 value = _profiles.First(entry => entry.Key == id).Value;
                 return true;
-            }
-            catch {
+            } catch {
                 value = null;
                 return false;
             }
@@ -160,7 +163,7 @@ namespace dotMCLauncher.Profiling
 
         public LauncherProfile this[string id]
         {
-            get { return Values.FirstOrDefault(entry => entry.Id == id); }
+            get => Values.FirstOrDefault(entry => entry.Id == id);
             set {
                 Remove(id);
                 Add(id, value);
@@ -184,18 +187,22 @@ namespace dotMCLauncher.Profiling
         public static ProfileManager Parse(string rawJsonProfileList)
             => JsonConvert.DeserializeObject<ProfileManager>(rawJsonProfileList);
 
-        private void AssociateIds()
+        public string GetLastUsedProfile()
+            => Values.FirstOrDefault(profile => profile.LastUsed == Values.Max(p => p.LastUsed))?.Id ?? Values.FirstOrDefault()?.Id;
+
+        [OnDeserialized]
+        private void OnDeserialized(StreamingContext context)
         {
             foreach (KeyValuePair<string, LauncherProfile> pair in _profiles) {
                 pair.Value.Id = pair.Key;
             }
         }
 
-        [OnDeserialized]
-        private void OnDeserialized(StreamingContext context)
-            => AssociateIds();
+        private static string GetNewClientToken()
+             => Guid.NewGuid().ToString("N").ToUpperInvariant();
 
-        IEnumerator<KeyValuePair<string, LauncherProfile>> IEnumerable<KeyValuePair<string, LauncherProfile>>.GetEnumerator()
+        IEnumerator<KeyValuePair<string, LauncherProfile>> IEnumerable<KeyValuePair<string, LauncherProfile>>.
+            GetEnumerator()
             => _profiles.GetEnumerator();
 
         public IEnumerator<LauncherProfile> GetEnumerator()

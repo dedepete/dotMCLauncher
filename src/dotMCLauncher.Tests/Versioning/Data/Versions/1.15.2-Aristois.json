@@ -1,0 +1,70 @@
+{
+  "inheritsFrom": "1.15.2",
+  "id": "1.15.2-Aristois",
+  "time": "2020-01-21T19:41:44+01:00",
+  "releaseTime": "2020-01-21T19:41:44+01:00",
+  "type": "release",
+  "mainClass": "me.deftware.client.framework.main.Main",
+  "libraries": [
+    {
+      "name": "me.deftware:aristois:loader",
+      "url": "https://maven.aristois.net/"
+    },
+    {
+      "name": "me.deftware:EMC-F-v2:latest-1.15.2",
+      "url": "https://gitlab.com/EMC-Framework/maven/raw/master/"
+    },
+    {
+      "name": "me.deftware:subsystem:0.7.2",
+      "url": "https://gitlab.com/EMC-Framework/maven/raw/master/"
+    },
+    {
+      "name": "net.fabricmc:sponge-mixin:0.8+build.16",
+      "url": "https://maven.fabricmc.net/"
+    },
+    {
+      "name": "net.fabricmc:tiny-remapper:0.2.0.52",
+      "url": "https://maven.fabricmc.net/"
+    },
+    {
+      "name": "net.fabricmc:tiny-mappings-parser:0.2.0.11",
+      "url": "https://maven.fabricmc.net/"
+    },
+    {
+      "name": "net.fabricmc:fabric-loader-sat4j:2.3.5.4",
+      "url": "https://maven.fabricmc.net/"
+    },
+    {
+      "name": "com.google.jimfs:jimfs:1.1",
+      "url": "https://maven.fabricmc.net/"
+    },
+    {
+      "name": "org.ow2.asm:asm:7.2",
+      "url": "https://maven.fabricmc.net/"
+    },
+    {
+      "name": "org.ow2.asm:asm-analysis:7.2",
+      "url": "https://maven.fabricmc.net/"
+    },
+    {
+      "name": "org.ow2.asm:asm-commons:7.2",
+      "url": "https://maven.fabricmc.net/"
+    },
+    {
+      "name": "org.ow2.asm:asm-tree:7.2",
+      "url": "https://maven.fabricmc.net/"
+    },
+    {
+      "name": "org.ow2.asm:asm-util:7.2",
+      "url": "https://maven.fabricmc.net/"
+    },
+    {
+      "name": "com.google.guava:guava:21.0",
+      "url": "https://maven.fabricmc.net/"
+    },
+    {
+      "name": "net.fabricmc:yarn:1.15.2+build.1",
+      "url": "https://maven.fabricmc.net/"
+    }
+  ]
+}

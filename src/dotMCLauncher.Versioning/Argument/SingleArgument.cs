@@ -1,7 +1,11 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using Newtonsoft.Json.Serialization;
 
 namespace dotMCLauncher.Versioning
 {
+    [JsonObject(NamingStrategyType = typeof(CamelCaseNamingStrategy), MemberSerialization = MemberSerialization.OptOut)]
+    [JsonConverter(typeof(ToStringJsonConverter))]
     public class SingleArgument : Argument
     {
         public SingleArgument(JToken value)
@@ -11,5 +15,8 @@ namespace dotMCLauncher.Versioning
         }
 
         public JToken Value { get; }
+
+        public override string ToString()
+            => Value.ToString();
     }
 }

@@ -1,16 +1,16 @@
 ﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 
 namespace dotMCLauncher.Resourcing
 {
+    [JsonObject(NamingStrategyType = typeof(CamelCaseNamingStrategy), MemberSerialization = MemberSerialization.OptOut)]
     public class Asset
     {
         [JsonIgnore]
         public string AssociatedName { get; set; }
 
-        [JsonProperty("hash")]
         public string Hash { get; set; }
 
-        [JsonProperty("size")]
         public int Size { get; set; }
 
         public string GetDirectoryName() => Hash?.Substring(0, 2);

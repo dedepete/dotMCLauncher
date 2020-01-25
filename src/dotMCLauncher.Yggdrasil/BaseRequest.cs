@@ -45,33 +45,44 @@ namespace dotMCLauncher.Yggdrasil
                 streamWriter.Close();
             }
 
-            string response;
+            RequestLogger.Sent(request, Content);
+
+            string json;
             try {
-                Stream dataStream = request.GetResponse().GetResponseStream();
-                StreamReader reader = new StreamReader(dataStream);
-                response = reader.ReadToEnd();
-                StatusCode = (int) (request.GetResponse() as HttpWebResponse).StatusCode;
-            }
-            catch (WebException ex) {
-                Stream dataStream = ex.Response.GetResponseStream();
-                StreamReader reader = new StreamReader(dataStream);
-                response = reader.ReadToEnd();
-                StatusCode = (int) (ex.Response as HttpWebResponse).StatusCode;
+                WebResponse webResponse = request.GetResponse();
+                Stream dataStream = webResponse.GetResponseStream();
+                StreamReader reader =
+                    new StreamReader(dataStream ?? throw new EndOfStreamException("Response stream is null."));
+                json = reader.ReadToEnd();
+                RequestLogger.Received(webResponse, json);
+                StatusCode = (int) ((HttpWebResponse) request.GetResponse()).StatusCode;
+            } catch (WebException ex) {
+                WebResponse webResponse = ex.Response;
+                Stream dataStream = webResponse.GetResponseStream();
+                StreamReader reader =
+                    new StreamReader(dataStream ?? throw new EndOfStreamException("Response stream is null."));
+                json = reader.ReadToEnd();
+                RequestLogger.Received(webResponse, json);
+                StatusCode = (int) ((HttpWebResponse) ex.Response).StatusCode;
             }
 
-            if (!string.IsNullOrWhiteSpace(response)) {
-                Response = JObject.Parse(response);
+            if (!string.IsNullOrWhiteSpace(json)) {
+                Response = JObject.Parse(json);
             }
 
-            return Parse(response);
+            return Parse(json);
         }
 
         protected virtual BaseRequest Parse(string json)
         {
-            BaseRequest request = JsonConvert.DeserializeObject(json, GetType()) as BaseRequest;
+            if (!(JsonConvert.DeserializeObject(json, GetType()) is BaseRequest request)) {
+                return null;
+            }
+
             request.Response = Response;
             request.StatusCode = StatusCode;
             return request;
+
         }
 
         public virtual bool? IsSuccessful()

@@ -27,15 +27,14 @@ namespace dotMCLauncher.Yggdrasil
             string response;
             try {
                 Stream dataStream = request.GetResponse().GetResponseStream();
-                StreamReader reader = new StreamReader(dataStream);
+                StreamReader reader = new StreamReader(dataStream ?? throw new EndOfStreamException("Response stream is null."));
                 response = reader.ReadToEnd();
-                StatusCode = (int) (request.GetResponse() as HttpWebResponse).StatusCode;
-            }
-            catch (WebException ex) {
+                StatusCode = (int) ((HttpWebResponse) request.GetResponse()).StatusCode;
+            } catch (WebException ex) {
                 Stream dataStream = ex.Response.GetResponseStream();
-                StreamReader reader = new StreamReader(dataStream);
+                StreamReader reader = new StreamReader(dataStream ?? throw new EndOfStreamException("Response stream is null."));
                 response = reader.ReadToEnd();
-                StatusCode = (int) (ex.Response as HttpWebResponse).StatusCode;
+                StatusCode = (int) ((HttpWebResponse) ex.Response).StatusCode;
             }
 
             if (!string.IsNullOrWhiteSpace(response)) {
@@ -47,7 +46,10 @@ namespace dotMCLauncher.Yggdrasil
 
         protected override BaseRequest Parse(string json)
         {
-            BaseRequest request = JsonConvert.DeserializeObject(json, GetType()) as BaseRequest;
+            if (!(JsonConvert.DeserializeObject(json, GetType()) is BaseRequest request)) {
+                return null;
+            }
+
             request.Response = Response;
             request.StatusCode = StatusCode;
             return request;

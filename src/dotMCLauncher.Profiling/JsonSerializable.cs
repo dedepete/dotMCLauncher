@@ -6,12 +6,14 @@ namespace dotMCLauncher.Profiling
     {
         public string ToJson()
             => ToJson(Formatting.Indented, new JsonSerializerSettings {
-                NullValueHandling = NullValueHandling.Ignore, DefaultValueHandling = DefaultValueHandling.Ignore,  DateTimeZoneHandling = DateTimeZoneHandling.Utc
+                NullValueHandling = NullValueHandling.Ignore, DefaultValueHandling = DefaultValueHandling.Ignore,
+                DateTimeZoneHandling = DateTimeZoneHandling.Utc, StringEscapeHandling = StringEscapeHandling.EscapeNonAscii
             });
 
         public string ToJson(Formatting formatting)
             => ToJson(formatting, new JsonSerializerSettings {
-                NullValueHandling = NullValueHandling.Ignore, DefaultValueHandling = DefaultValueHandling.Ignore, DateTimeZoneHandling = DateTimeZoneHandling.Utc
+                NullValueHandling = NullValueHandling.Ignore, DefaultValueHandling = DefaultValueHandling.Ignore,
+                DateTimeZoneHandling = DateTimeZoneHandling.Utc, StringEscapeHandling = StringEscapeHandling.EscapeNonAscii
             });
 
         public string ToJson(Formatting formatting, JsonSerializerSettings settings)

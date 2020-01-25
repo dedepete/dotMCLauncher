@@ -12,19 +12,28 @@ namespace dotMCLauncher.Versioning
     public class VersionManifest : BaseVersion
     {
         [JsonIgnore]
-        public VersionManifestType Type { get; set; } = VersionManifestType.V1;
+        public VersionManifestType Type
+        {
+            get {
+                if (Arguments != null) {
+                    return VersionManifestType.V2;
+                }
+
+                if (InheritableVersionManifest != null) {
+                    return InheritableVersionManifest.Type;
+                }
+
+                return ArgumentsCollection != null ? VersionManifestType.LEGACY : VersionManifestType.V2;
+            }
+        }
 
         /// <summary>
-        /// Arguments. v1
+        /// Arguments. Legacy
         /// </summary>
         public string MinecraftArguments
         {
-            get => _arguments;
-            set {
-                _arguments = value;
-                ArgumentsCollection = new ArgumentCollection();
-                ArgumentsCollection.Parse(value);
-            }
+            get => ArgumentsCollection.SourceLine;
+            set => ArgumentsCollection = new ArgumentCollection(value);
         }
 
         /// <summary>
@@ -32,9 +41,19 @@ namespace dotMCLauncher.Versioning
         /// </summary>
         public JObject Arguments
         {
-            get => ArgumentsGroups != null ? JObject.FromObject(ArgumentsGroups) : null;
+            get {
+                if (ArgumentsGroups == null || ArgumentsGroups.Count == 0) {
+                    return null;
+                }
+
+                JObject jObject = new JObject();
+                foreach (ArgumentsGroup argumentsGroup in ArgumentsGroups) {
+                    jObject.Add(argumentsGroup.Type.ToString().ToLowerInvariant(), JArray.FromObject(argumentsGroup.Arguments));
+                }
+
+                return jObject;
+            }
             set {
-                Type = VersionManifestType.V2;
                 ArgumentsGroups = new List<ArgumentsGroup>();
                 foreach (KeyValuePair<string, JToken> pair in value) {
                     ArgumentsGroup group = new ArgumentsGroup();
@@ -42,12 +61,13 @@ namespace dotMCLauncher.Versioning
                         ? ArgumentsGroupType.GAME
                         : ArgumentsGroupType.JVM;
                     group.Arguments = new List<Argument>();
-                    JArray array = pair.Value as JArray;
-                    foreach (JToken token in array) {
-                        if (token is JValue) {
-                            group.Arguments.Add(new SingleArgument(token));
-                        } else {
-                            group.Arguments.Add(token.ToObject<ExtendedArgument>());
+                    if (pair.Value is JArray array) {
+                        foreach (JToken token in array) {
+                            if (token is JValue) {
+                                group.Arguments.Add(new SingleArgument(token));
+                            } else {
+                                group.Arguments.Add(token.ToObject<MultipleArgument>());
+                            }
                         }
                     }
 
@@ -100,12 +120,6 @@ namespace dotMCLauncher.Versioning
         public VersionManifest InheritableVersionManifest { get; set; }
 
         /// <summary>
-        /// Argument line. v1
-        /// </summary>
-        [JsonIgnore]
-        private string _arguments { get; set; }
-
-        /// <summary>
         /// Argument list. v1
         /// </summary>
         [JsonIgnore]
@@ -121,7 +135,8 @@ namespace dotMCLauncher.Versioning
         /// Parses build's JSON file.
         /// </summary>
         /// <param name="pathToDirectory">Path to build's directory.</param>
-        public static VersionManifest ParseFromDirectory(DirectoryInfo pathToDirectory) => ParseFromDirectory(pathToDirectory, true);
+        public static VersionManifest ParseFromDirectory(DirectoryInfo pathToDirectory)
+            => ParseFromDirectory(pathToDirectory, true);
 
         /// <summary>
         /// Parses build's JSON file.
@@ -135,13 +150,19 @@ namespace dotMCLauncher.Versioning
             VersionManifest ver = JsonConvert.DeserializeObject(
                 File.ReadAllText(Path.Combine(pathToDirectory.FullName, version + ".json")),
                 typeof(VersionManifest)) as VersionManifest;
-            if (ver.InheritsFrom == null || !parseInheritableVersion) {
+            if (ver?.InheritsFrom == null || !parseInheritableVersion) {
                 return ver;
             }
 
-            ver.InheritableVersionManifest =
-                ParseFromDirectory(new DirectoryInfo(Path.Combine(pathToDirectory.Parent.FullName, ver.InheritsFrom)));
-            ver.Libraries.AddRange(ver.InheritableVersionManifest.Libraries);
+            try {
+                ver.InheritableVersionManifest =
+                    ParseFromDirectory(
+                        new DirectoryInfo(Path.Combine(pathToDirectory.Parent?.FullName ?? throw new DirectoryNotFoundException(), ver.InheritsFrom)));
+                ver.Libraries.AddRange(ver.InheritableVersionManifest.Libraries);
+            } catch (Exception exception) {
+                throw new ParentVersionManifestParseException(exception, ver.VersionId, ver.InheritsFrom);
+            }
+
             return ver;
         }
 
@@ -152,7 +173,8 @@ namespace dotMCLauncher.Versioning
 
         public static bool IsValid(string pathToDirectory) => IsValid(pathToDirectory, false);
 
-        public static bool IsValid(string pathToDirectory, bool throwsExceptions) => IsValid(new DirectoryInfo(pathToDirectory), false);
+        public static bool IsValid(string pathToDirectory, bool throwsExceptions)
+            => IsValid(new DirectoryInfo(pathToDirectory), false);
 
         public static bool IsValid(DirectoryInfo directoryInfo) => IsValid(directoryInfo, false);
 
@@ -163,21 +185,23 @@ namespace dotMCLauncher.Versioning
 
             if (!File.Exists(jsonPath)) {
                 if (throwsExceptions) {
-                    throw new VersionNotFound("Unable to locate JSON file.",
-                        new FileNotFoundException($"The following file is required to parse version's manifest: '{jsonPath}'",
-                            jsonPath));
+                    throw new VersionManifestNotFoundException("Unable to locate JSON file.",
+                        new FileNotFoundException(
+                            $"The following file is required to parse version's manifest: '{jsonPath}'",
+                            jsonPath), version);
                 }
 
                 return false;
             }
 
-            if (JsonConvert.DeserializeObject(File.ReadAllText(jsonPath), typeof(VersionManifest)) is VersionManifest) {
+            if (Parse(File.ReadAllText(jsonPath)) != null) {
                 return true;
             }
 
             if (throwsExceptions) {
-                throw new VersionCorrupted("Unable to load JSON file.",
-                    new FileLoadException($"The following file is corrupted and cannot be loaded: {jsonPath}", jsonPath));
+                throw new VersionManifestCorruptedException("Unable to load JSON file.",
+                    new FileLoadException($"The following file is corrupted and cannot be loaded: {jsonPath}",
+                        jsonPath), version);
             }
 
             return false;
@@ -191,7 +215,8 @@ namespace dotMCLauncher.Versioning
             }
 
             VersionManifest versionManifest =
-                (VersionManifest) JsonConvert.DeserializeObject(File.ReadAllText(Path.Combine(pathToDirectory.ToString(), version + ".json")),
+                (VersionManifest) JsonConvert.DeserializeObject(
+                    File.ReadAllText(Path.Combine(pathToDirectory.ToString(), version + ".json")),
                     typeof(VersionManifest));
             return versionManifest != null;
         }
@@ -245,7 +270,8 @@ namespace dotMCLauncher.Versioning
             return InheritsFrom == null ? VersionId : InheritableVersionManifest.GetBaseJar();
         }
 
-        public string BuildArgumentsByGroup(ArgumentsGroupType group, Dictionary<string, string> jvmArgumentDictionary, RuleConditions conditions)
+        public string BuildArgumentsByGroup(ArgumentsGroupType group, Dictionary<string, string> jvmArgumentDictionary,
+            RuleConditions conditions)
         {
             string toReturn = ArgumentsGroups?.FirstOrDefault(ag => ag.Type == group)?
                                   .ToString(jvmArgumentDictionary, conditions) ?? string.Empty;
@@ -263,16 +289,7 @@ namespace dotMCLauncher.Versioning
                 $@"https://s3.amazonaws.com/Minecraft.Download/versions/{VersionId}/{VersionId}.jar";
 
         public string GetAssetsIndexDownloadUrl()
-            => GetBaseAssetIndex()?.Url ?? $"https://s3.amazonaws.com/Minecraft.Download/indexes/{Assets ?? "legacy"}.json";
-    }
-
-    public class VersionNotFound : Exception
-    {
-        public VersionNotFound(string message, Exception innerException) : base(message, innerException) { }
-    }
-
-    public class VersionCorrupted : Exception
-    {
-        public VersionCorrupted(string message, Exception innerException) : base(message, innerException) { }
+            => GetBaseAssetIndex()?.Url ??
+               $"https://s3.amazonaws.com/Minecraft.Download/indexes/{Assets ?? "legacy"}.json";
     }
 }

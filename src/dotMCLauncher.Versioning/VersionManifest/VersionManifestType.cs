@@ -2,7 +2,7 @@
 {
     public enum VersionManifestType
     {
-        V1,
+        LEGACY,
         V2
     }
 }

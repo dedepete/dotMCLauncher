@@ -23,7 +23,9 @@ namespace dotMCLauncher.Tests.Versioning
             Platform = platform;
             VersionId = version;
 
-            VersionManifest = VersionManifest.Parse(File.ReadAllText(TestContext.CurrentContext.TestDirectory + $@"\Versioning\Data\Versions\{VersionId}.json"));
+            VersionManifest =
+                VersionManifest.Parse(File.ReadAllText(TestContext.CurrentContext.TestDirectory +
+                                                       $@"\Versioning\Data\Versions\{VersionId}.json"));
         }
 
         [TestCase("x86")]
@@ -38,12 +40,14 @@ namespace dotMCLauncher.Tests.Versioning
             };
 
             List<Library> list = VersionManifest.Libraries.Where(lib =>
-                lib.IsAllowed(conditions) || lib.IsAllowed(conditions) && lib.IsNativesFor(Platform)).ToList();
+                                                                     lib.IsAllowed(conditions) ||
+                                                                     lib.IsAllowed(conditions) &&
+                                                                     lib.IsNativesFor(Platform)).ToList();
 
             foreach (Library library in list) {
-
                 Console.WriteLine($"{library.Name} IsNatives: {library.IsNatives}");
-                foreach (DownloadEntry downloadsEntry in library.GetDownloadsEntries(string.Empty, Platform, architecture == "x64")) {
+                foreach (DownloadEntry downloadsEntry in library.GetDownloadsEntries(string.Empty, Platform,
+                    architecture == "x64")) {
                     Console.WriteLine($" Url: {downloadsEntry.Url}");
                     Console.WriteLine($" Path: {downloadsEntry.Path}");
                 }
@@ -90,7 +94,8 @@ namespace dotMCLauncher.Tests.Versioning
         {
             get {
                 string[] versions = {
-                    "1.14_Pre-Release_2", "1.13.2", "1.12.2", "1.11.2", "1.8.9", "1.7.10", "1.2.5", "1.0"
+                    "1.14_Pre-Release_2", "1.13.2", "1.12.2", "1.11.2", "1.8.9", "1.7.10", "1.2.5", "1.0",
+                    "1.15.2-Aristois", "1.7.10-LiteLoader-Forge"
                 };
 
                 string[] operatingSystems = {

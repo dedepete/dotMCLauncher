@@ -1,13 +1,13 @@
 ﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 
 namespace dotMCLauncher.Versioning
 {
+    [JsonObject(NamingStrategyType = typeof(CamelCaseNamingStrategy), MemberSerialization = MemberSerialization.OptOut)]
     public class OsConditions
     {
-        [JsonProperty("name")]
         public string Name { get; set; }
 
-        [JsonProperty("version")]
         public string Version { get; set; }
 
         [JsonProperty("arch")]
@@ -33,7 +33,10 @@ namespace dotMCLauncher.Versioning
                 }
             }
 
-            if (Architecture == null) return true;
+            if (Architecture == null) {
+                return true;
+            }
+
             return osConditions.Architecture == Architecture;
         }
     }

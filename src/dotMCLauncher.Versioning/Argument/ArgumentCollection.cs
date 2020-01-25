@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -7,16 +8,26 @@ namespace dotMCLauncher.Versioning
 {
     public class ArgumentCollection : Dictionary<string, List<string>>
     {
-        private string _argLine { get; set; }
+        public string SourceLine { get; private set; }
+        private string _targetLine { get; set; }
+
+        public ArgumentCollection(string sourceLine)
+        {
+            SourceLine = sourceLine;
+            Parse();
+        }
 
         /// <summary>
-        /// Parses string.
+        /// Parses source argument line.
         /// </summary>
-        /// <param name="argLine">Input string.</param>
-        public void Parse(string argLine)
+        public void Parse()
         {
+            if (string.IsNullOrEmpty(SourceLine)) {
+                throw new ArgumentNullException(nameof(SourceLine));
+            }
+
             Regex re = new Regex(@"\-\-(\w+) (\S+)", RegexOptions.IgnoreCase);
-            MatchCollection match = re.Matches(argLine);
+            MatchCollection match = re.Matches(SourceLine);
             for (int i = 0; i < match.Count; i++) {
                 if (!ContainsKey(match[i].Groups[1].Value)) {
                     Add(match[i].Groups[1].Value, new List<string> {
@@ -26,7 +37,18 @@ namespace dotMCLauncher.Versioning
                     base[match[i].Groups[1].Value].Add(match[i].Groups[2].Value);
                 }
             }
-            _argLine = re.Replace(argLine, string.Empty).Trim();
+
+            _targetLine = re.Replace(SourceLine, string.Empty).Trim();
+        }
+
+        /// <summary>
+        /// Parses source argument line from provided string.
+        /// </summary>
+        /// <param name="argLine">Input string.</param>
+        public void Parse(string argLine)
+        {
+            SourceLine = argLine;
+            Parse();
         }
 
         /// <summary>
@@ -49,6 +71,7 @@ namespace dotMCLauncher.Versioning
                 base[key].Add(value);
                 return;
             }
+
             Add(key, new List<string> {
                 value
             });
@@ -64,6 +87,7 @@ namespace dotMCLauncher.Versioning
             if (!ContainsKey(key)) {
                 Add(key, new List<string>());
             }
+
             foreach (string str in values) {
                 base[key].Add(str);
             }
@@ -73,9 +97,7 @@ namespace dotMCLauncher.Versioning
         /// Builds argument line with replaced values.
         /// </summary>
         public override string ToString()
-        {
-            return ToString(null);
-        }
+            => ToString(null);
 
         /// <summary>
         /// Builds argument line with replaced values.
@@ -85,14 +107,15 @@ namespace dotMCLauncher.Versioning
         {
             Regex re = new Regex(@"\$\{(\w+)\}", RegexOptions.IgnoreCase);
             StringBuilder toReturn = new StringBuilder();
-            if (!string.IsNullOrEmpty(_argLine)) {
-                toReturn.Append(re.Replace(_argLine,
+            if (!string.IsNullOrEmpty(_targetLine)) {
+                toReturn.Append(re.Replace(_targetLine,
                                     match => values != null && values.ContainsKey(match.Groups[1].Value)
                                         ? (!values[match.Groups[1].Value].Contains(' ')
                                             ? values[match.Groups[1].Value]
                                             : $"\"{values[match.Groups[1].Value]}\"")
                                         : match.Value) + " ");
             }
+
             foreach (string key in Keys) {
                 string value;
                 if (base[key]?.Count > 0 && values != null) {
@@ -105,12 +128,15 @@ namespace dotMCLauncher.Versioning
                                         ? values[match.Groups[1].Value]
                                         : str);
                         }
+
                         if (value.Contains(' ')) {
                             value = $"\"{value}\"";
                         }
+
                         if (value != string.Empty) {
                             value = " " + value;
                         }
+
                         toReturn.Append($"--{key}{value} ");
                     }
                 } else if (base[key]?.Count > 0) {
@@ -119,15 +145,18 @@ namespace dotMCLauncher.Versioning
                         if (value.Contains(' ')) {
                             value = $"\"{value}\"";
                         }
+
                         if (value != string.Empty) {
                             value = " " + value;
                         }
+
                         toReturn.Append($"--{key}{value} ");
                     }
                 } else {
                     toReturn.Append($"--{key} ");
                 }
             }
+
             return toReturn.ToString().Substring(0, toReturn.Length - 1);
         }
     }

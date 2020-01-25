@@ -2,15 +2,16 @@
 using System.IO;
 using System.Runtime.Serialization;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 
 namespace dotMCLauncher.Resourcing
 {
+    [JsonObject(NamingStrategyType = typeof(CamelCaseNamingStrategy), MemberSerialization = MemberSerialization.OptOut)]
     public class AssetsManifest
     {
         [JsonProperty("virtual", DefaultValueHandling = DefaultValueHandling.Ignore)]
         public bool IsVirtual { get; set; }
 
-        [JsonProperty("objects")]
         public Dictionary<string, Asset> Objects { get; set; }
 
         private void AssociateNames()

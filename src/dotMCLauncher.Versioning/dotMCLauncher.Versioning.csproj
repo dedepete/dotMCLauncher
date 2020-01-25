@@ -34,8 +34,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Newtonsoft.Json.12.0.1\lib\net40\Newtonsoft.Json.dll</HintPath>
-      <Private>True</Private>
+      <HintPath>..\..\packages\Newtonsoft.Json.12.0.3\lib\net40\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -46,8 +45,9 @@
     <Compile Include="Argument\ArgumentsGroup.cs" />
     <Compile Include="Argument\ArgumentsGroupType.cs" />
     <Compile Include="Argument\ArgumentType.cs" />
-    <Compile Include="Argument\ExtendedArgument.cs" />
+    <Compile Include="Argument\MultipleArgument.cs" />
     <Compile Include="Argument\SingleArgument.cs" />
+    <Compile Include="ToStringJsonConverter.cs" />
     <Compile Include="DownloadEntry.cs" />
     <Compile Include="Library\Library.cs" />
     <Compile Include="Library\LibraryDownloadInfo.cs" />
@@ -62,7 +62,10 @@
     <Compile Include="Rule\RuleConditions.cs" />
     <Compile Include="BaseVersion.cs" />
     <Compile Include="VersionDownloadInfo.cs" />
+    <Compile Include="VersionManifest\ParentVersionManifestParseException.cs" />
     <Compile Include="VersionManifest\VersionManifest.cs" />
+    <Compile Include="VersionManifest\VersionManifestCorruptedException.cs" />
+    <Compile Include="VersionManifest\VersionManifestNotFoundException.cs" />
     <Compile Include="VersionManifest\VersionManifestType.cs" />
   </ItemGroup>
   <ItemGroup>

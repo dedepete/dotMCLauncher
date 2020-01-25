@@ -3,6 +3,6 @@
     public enum ArgumentType
     {
         SINGLE,
-        EXTENDED
+        MULTIPLE
     }
 }
