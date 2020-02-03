@@ -14,13 +14,12 @@ It makes much easier to work with Minecraft Launcher's things like:
 ## Requirements
 
 - Not being a dumbass;
-- **.NET Framework 4**;
-- At least **Visual Studio 2017**, they forced me to betray my VS2015 because of C# 7.0 features :(.
+- At least **.NET Core 2.1 SDK**.
 
 ## To do
 
 - More documentation comments;
-- More NUnit tests;
+- More NUnit tests and fixtures;
 - Wiki or another way to provide samples.
 
 ## Third-party tools, assemblies and code

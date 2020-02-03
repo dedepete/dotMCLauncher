@@ -93,16 +93,14 @@ namespace dotMCLauncher.Tests.Versioning
         public static IEnumerable Fixtures
         {
             get {
-                string[] versions = {
-                    "1.14_Pre-Release_2", "1.13.2", "1.12.2", "1.11.2", "1.8.9", "1.7.10", "1.2.5", "1.0",
-                    "1.15.2-Aristois", "1.7.10-LiteLoader-Forge"
-                };
-
                 string[] operatingSystems = {
                     "windows", "linux", "osx", null
                 };
 
-                foreach (string version in versions) {
+                foreach (string version in new DirectoryInfo(
+                        TestContext.CurrentContext.TestDirectory + @"\Versioning\Data\Versions\").GetFiles()
+                    .Select(file => Path.GetFileNameWithoutExtension(file.Name))) {
+
                     foreach (string operatingSystem in operatingSystems) {
                         yield return new TestFixtureData(version, operatingSystem) {
                             TestName = $"{version.Replace('.', '_')}. {operatingSystem ?? "null"}"
