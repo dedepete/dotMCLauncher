@@ -22,10 +22,8 @@ namespace dotMCLauncher.Yggdrasil
 
         #endregion
 
-        public override bool? IsSuccessful()
-        {
-            return StatusCode == 204;
-        }
+        public override bool? WasSuccessful
+            => StatusCode == 204;
 
         protected override BaseRequest Parse(string json)
         {

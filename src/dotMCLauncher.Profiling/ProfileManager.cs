@@ -16,19 +16,6 @@ namespace dotMCLauncher.Profiling
             _profiles = new Dictionary<string, LauncherProfile>();
         }
 
-        /// <summary>
-        /// Last used profile's id.
-        /// </summary>
-        /// <returns>Presetted id, first available's profile id or <c>Null</c> if none is available.</returns>
-        [Obsolete(
-            "This property is not being used in official launcher any longer and will be removed in next release. Use GetLastUsedProfile() and property LastUsed of each profile instead.",
-            true)]
-        public string SelectedProfile
-        {
-            get => _selectedProfile ?? Values.FirstOrDefault()?.Id;
-            set => _selectedProfile = value ?? Values.FirstOrDefault()?.Id;
-        }
-
         private string _selectedProfile { get; set; }
 
         [JsonProperty("profiles")]
@@ -57,20 +44,6 @@ namespace dotMCLauncher.Profiling
         /// </summary>
         [JsonProperty]
         public SelectedUser SelectedUser { get; set; }
-
-        /// <summary>
-        /// Analytics token. I don't like analytics. Why do u even need this field?
-        /// </summary>
-        [Obsolete("This property is not being used in official launcher any longer and will be removed in next release.", true)]
-        [JsonProperty]
-        public string AnalyticsToken { get; set; }
-
-        /// <summary>
-        /// Analytics failcount. Mojang are watching us!
-        /// </summary>
-        [Obsolete("This property is not being used in official launcher any longer and will be removed in next release.", true)]
-        [JsonProperty]
-        public int AnalyticsFailcount { get; set; }
 
         /// <summary>
         /// Client token.

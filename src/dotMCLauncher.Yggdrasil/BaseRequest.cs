@@ -20,7 +20,7 @@ namespace dotMCLauncher.Yggdrasil
         [JsonIgnore]
         public int StatusCode { get; set; }
 
-        public virtual BaseRequest MakeRequest()
+        public virtual BaseRequest SendRequest()
         {
             if (Content == null) {
                 Content = JsonConvert.SerializeObject(this, GetType(), Formatting.Indented,
@@ -55,7 +55,7 @@ namespace dotMCLauncher.Yggdrasil
                     new StreamReader(dataStream ?? throw new EndOfStreamException("Response stream is null."));
                 json = reader.ReadToEnd();
                 RequestLogger.Received(webResponse, json);
-                StatusCode = (int) ((HttpWebResponse) request.GetResponse()).StatusCode;
+                StatusCode = (int) ((HttpWebResponse) webResponse).StatusCode;
             } catch (WebException ex) {
                 WebResponse webResponse = ex.Response;
                 Stream dataStream = webResponse.GetResponseStream();
@@ -63,7 +63,7 @@ namespace dotMCLauncher.Yggdrasil
                     new StreamReader(dataStream ?? throw new EndOfStreamException("Response stream is null."));
                 json = reader.ReadToEnd();
                 RequestLogger.Received(webResponse, json);
-                StatusCode = (int) ((HttpWebResponse) ex.Response).StatusCode;
+                StatusCode = (int) ((HttpWebResponse) webResponse).StatusCode;
             }
 
             if (!string.IsNullOrWhiteSpace(json)) {
@@ -85,13 +85,16 @@ namespace dotMCLauncher.Yggdrasil
 
         }
 
-        public virtual bool? IsSuccessful()
+        [JsonIgnore]
+        public virtual bool? WasSuccessful
         {
-            if (Response == null) {
-                return null;
-            }
+            get {
+                if (Response == null) {
+                    return null;
+                }
 
-            return StatusCode == 200;
+                return StatusCode == 200;
+            }
         }
     }
 }

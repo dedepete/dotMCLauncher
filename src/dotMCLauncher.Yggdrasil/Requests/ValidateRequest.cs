@@ -22,14 +22,10 @@ namespace dotMCLauncher.Yggdrasil
 
         #endregion
 
-        public override bool? IsSuccessful()
-        {
-            return string.IsNullOrEmpty(Response?.ToString());
-        }
+        public override bool? WasSuccessful
+            => string.IsNullOrEmpty(Response?.ToString());
 
         protected override BaseRequest Parse(string json)
-        {
-            return this;
-        }
+            => this;
     }
 }

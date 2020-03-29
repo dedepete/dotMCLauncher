@@ -4,8 +4,8 @@
 	  <Description>A library for working with Mojang's Yggdrasil authentication service.</Description>
     <Company>Igor Popov</Company>
     <Copyright>Copyright Igor Popov © 2019</Copyright>
-    <AssemblyVersion>0.4.0.25</AssemblyVersion>
-    <FileVersion>0.4.0.25</FileVersion>
+    <AssemblyVersion>0.4.0.50</AssemblyVersion>
+    <FileVersion>0.4.0.50</FileVersion>
   </PropertyGroup>
 
   <ItemGroup>
