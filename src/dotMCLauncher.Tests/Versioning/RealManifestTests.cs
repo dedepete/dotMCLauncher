@@ -25,7 +25,7 @@ namespace dotMCLauncher.Tests.Versioning
 
             VersionManifest =
                 VersionManifest.Parse(File.ReadAllText(TestContext.CurrentContext.TestDirectory +
-                                                       $@"\Versioning\Data\Versions\{VersionId}.json"));
+                                                       $"/Versioning/Data/Versions/{VersionId}.json"));
         }
 
         [TestCase("x86")]
@@ -98,7 +98,7 @@ namespace dotMCLauncher.Tests.Versioning
                 };
 
                 foreach (string version in new DirectoryInfo(
-                        TestContext.CurrentContext.TestDirectory + @"\Versioning\Data\Versions\").GetFiles()
+                        TestContext.CurrentContext.TestDirectory + @"/Versioning/Data/Versions/").GetFiles()
                     .Select(file => Path.GetFileNameWithoutExtension(file.Name))) {
 
                     foreach (string operatingSystem in operatingSystems) {
