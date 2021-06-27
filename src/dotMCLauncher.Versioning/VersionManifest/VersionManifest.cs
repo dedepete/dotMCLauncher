@@ -114,6 +114,16 @@ namespace dotMCLauncher.Versioning
         public VersionDownloadInfo Downloads { get; set; }
 
         /// <summary>
+        /// The version of the required Java Runtime Environment. See <see cref="VersionManifestJavaVersion"/>.
+        /// </summary>
+        public VersionManifestJavaVersion JavaVersion { get; set; }
+
+        /// <summary>
+        /// Its value is 1 for all recent versions of the game or 0 for all others. This tag tells the launcher whether it should urge the user to be careful since this version is older and might not support the latest player safety features.
+        /// </summary>
+        public int ComplianceLevel { get; set; }
+
+        /// <summary>
         /// Parent's manifest.
         /// </summary>
         [JsonIgnore]
@@ -160,7 +170,7 @@ namespace dotMCLauncher.Versioning
                         new DirectoryInfo(Path.Combine(pathToDirectory.Parent?.FullName ?? throw new DirectoryNotFoundException(), ver.InheritsFrom)));
                 ver.Libraries.AddRange(ver.InheritableVersionManifest.Libraries);
             } catch (Exception exception) {
-                throw new ParentVersionManifestParseException(exception, ver.VersionId, ver.InheritsFrom);
+                throw new VersionManifestParentParseException(exception, ver.VersionId, ver.InheritsFrom);
             }
 
             return ver;

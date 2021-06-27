@@ -1,12 +1,12 @@
 ﻿using System;
 
 namespace dotMCLauncher.Versioning {
-    public class ParentVersionManifestParseException : Exception
+    public class VersionManifestParentParseException : Exception
     {
         public string VersionId { get; }
         public string BaseVersionId { get; }
 
-        public ParentVersionManifestParseException(Exception innerException, string versionId, string baseVersionId) : base(
+        public VersionManifestParentParseException(Exception innerException, string versionId, string baseVersionId) : base(
             "Unable to parse parent version manifest.",
             innerException)
         {
@@ -14,7 +14,7 @@ namespace dotMCLauncher.Versioning {
             BaseVersionId = baseVersionId;
         }
 
-        public ParentVersionManifestParseException(Exception innerException) : base("Unable to parse parent version.",
+        public VersionManifestParentParseException(Exception innerException) : base("Unable to parse parent version.",
             innerException) { }
     }
 }

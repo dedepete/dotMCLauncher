@@ -82,6 +82,6 @@ namespace dotMCLauncher.Profiling
         public bool IsLogConfigurationXml { get; set; }
 
         public override string ToString()
-            => Name;
+            => $"{{\"{Name}\",{Type},{Id}}}";
     }
 }
