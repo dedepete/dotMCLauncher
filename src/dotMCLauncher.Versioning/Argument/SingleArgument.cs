@@ -14,8 +14,6 @@ namespace dotMCLauncher.Versioning
             Value = value;
         }
 
-        public JToken Value { get; }
-
         public override string ToString()
             => Value.ToString();
     }

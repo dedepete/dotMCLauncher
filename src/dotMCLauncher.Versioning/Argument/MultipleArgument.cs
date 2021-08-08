@@ -15,7 +15,7 @@ namespace dotMCLauncher.Versioning
 
         public bool IsAllowed(RuleConditions conditions) => _rules?.CheckIfAllowed(conditions) ?? true;
 
-        public JToken Value
+        public override JToken Value
         {
             get {
                 if (!HasMultipleArguments) {

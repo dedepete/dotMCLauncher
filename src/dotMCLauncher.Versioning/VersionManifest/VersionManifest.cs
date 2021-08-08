@@ -184,7 +184,7 @@ namespace dotMCLauncher.Versioning
         public static bool IsValid(string pathToDirectory) => IsValid(pathToDirectory, false);
 
         public static bool IsValid(string pathToDirectory, bool throwsExceptions)
-            => IsValid(new DirectoryInfo(pathToDirectory), false);
+            => IsValid(new DirectoryInfo(pathToDirectory), throwsExceptions);
 
         public static bool IsValid(DirectoryInfo directoryInfo) => IsValid(directoryInfo, false);
 
@@ -204,8 +204,17 @@ namespace dotMCLauncher.Versioning
                 return false;
             }
 
-            if (Parse(File.ReadAllText(jsonPath)) != null) {
-                return true;
+            try {
+                if (Parse(File.ReadAllText(jsonPath)) != null) {
+                    return true;
+                }
+            }
+            catch (Exception exception) {
+                if (throwsExceptions) {
+                    throw new VersionManifestCorruptedException("Unable to load JSON file.",
+                        new FileLoadException($"The following file is corrupted and cannot be loaded: {jsonPath}",
+                            jsonPath, exception), version);
+                }
             }
 
             if (throwsExceptions) {
@@ -278,6 +287,11 @@ namespace dotMCLauncher.Versioning
         public string GetBaseJar()
         {
             return InheritsFrom == null ? VersionId : InheritableVersionManifest.GetBaseJar();
+        }
+
+        public VersionManifestJavaVersion GetJavaVersion()
+        {
+            return InheritsFrom == null ? JavaVersion : InheritableVersionManifest.GetJavaVersion();
         }
 
         public string BuildArgumentsByGroup(ArgumentsGroupType group, Dictionary<string, string> jvmArgumentDictionary,

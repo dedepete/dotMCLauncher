@@ -4,8 +4,8 @@
 	  <Description>A library for manipulating with Minecraft Launcher's version manifests.</Description>
     <Company>Igor Popov</Company>
     <Copyright>Copyright Igor Popov © 2019</Copyright>
-    <AssemblyVersion>0.5.1.65</AssemblyVersion>
-    <FileVersion>0.5.1.65</FileVersion>
+    <AssemblyVersion>0.5.2.82</AssemblyVersion>
+    <FileVersion>0.5.2.82</FileVersion>
   </PropertyGroup>
 
   <ItemGroup>

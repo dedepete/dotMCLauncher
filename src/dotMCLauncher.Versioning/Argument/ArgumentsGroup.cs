@@ -18,7 +18,10 @@ namespace dotMCLauncher.Versioning
             foreach (Argument argument in Arguments) {
                 switch (argument.Type) {
                     case ArgumentType.SINGLE:
-                        toReturn.Append((argument as SingleArgument)?.Value + " ");
+                        if (!(argument is SingleArgument singleArgument)) {
+                            break;
+                        }
+
                         break;
                     case ArgumentType.MULTIPLE:
                         if (!(argument is MultipleArgument multipleArgument)) {
@@ -29,22 +32,23 @@ namespace dotMCLauncher.Versioning
                             continue;
                         }
 
-                        if (!multipleArgument.HasMultipleArguments) {
-                            toReturn.Append((multipleArgument.Value.Contains(' ')
-                                                ? "\"" + multipleArgument.Value + "\""
-                                                : multipleArgument.Value) + " ");
+                        if (multipleArgument.HasMultipleArguments) {
+                            toReturn = multipleArgument.Values.Aggregate(toReturn,
+                            (current, value) =>
+                                toReturn.Append((value.ToString().Contains(' ')
+                                                    ? "\"" + value + "\""
+                                                    : value) + " "));
                             continue;
                         }
 
-                        toReturn = multipleArgument.Values.Aggregate(toReturn,
-                            (current, value) =>
-                                toReturn.Append((Type == ArgumentsGroupType.JVM && value.Contains(' ')
-                                                    ? "\"" + value + "\""
-                                                    : value) + " "));
                         break;
                     default:
                         throw new ArgumentOutOfRangeException();
                 }
+
+                toReturn.Append((argument.Value.ToString().Contains(' ')
+                                                ? "\"" + argument.Value + "\""
+                                                : argument.Value) + " ");
             }
 
             Regex re = new Regex(@"\$\{(\w+)\}", RegexOptions.IgnoreCase);
