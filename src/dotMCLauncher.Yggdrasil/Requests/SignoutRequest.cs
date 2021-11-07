@@ -15,7 +15,7 @@ namespace dotMCLauncher.Yggdrasil
         #region Request
 
         [JsonProperty("username")]
-        private string Username { get; set; }
+        public string Username { get; protected set; }
 
         [JsonProperty("password")]
         private string Password { get; set; }

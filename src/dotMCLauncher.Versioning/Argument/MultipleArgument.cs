@@ -13,8 +13,16 @@ namespace dotMCLauncher.Versioning
             Type = ArgumentType.MULTIPLE;
         }
 
+        [JsonConstructor]
+        public MultipleArgument(JToken value)
+        {
+            Type = ArgumentType.MULTIPLE;
+            Value = value;
+        }
+
         public bool IsAllowed(RuleConditions conditions) => _rules?.CheckIfAllowed(conditions) ?? true;
 
+        [JsonProperty("value", ObjectCreationHandling = ObjectCreationHandling.Replace)]
         public override JToken Value
         {
             get {

@@ -16,7 +16,7 @@ namespace dotMCLauncher.Yggdrasil
         #region Request
 
         [JsonProperty("requestUser")]
-        private bool RequestUser { get; set; } = true;
+        public bool RequestUser { get; set; } = true;
 
         #endregion
 

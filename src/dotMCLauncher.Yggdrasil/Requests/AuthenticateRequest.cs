@@ -26,13 +26,13 @@ namespace dotMCLauncher.Yggdrasil
         };
 
         [JsonProperty("username")]
-        private string Username { get; set; }
+        public string Username { get; protected set; }
 
         [JsonProperty("password")]
         private string Password { get; set; }
 
         [JsonProperty("requestUser")]
-        private bool RequestUser { get; set; } = true;
+        public bool RequestUser { get; protected set; } = true;
 
         #endregion
 

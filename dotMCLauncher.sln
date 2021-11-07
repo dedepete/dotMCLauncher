@@ -3,15 +3,15 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29201.188
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "dotMCLauncher.Profiling", "src\dotMCLauncher.Profiling\dotMCLauncher.Profiling.csproj", "{39481F27-537E-4AE3-B58F-92E364535731}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "dotMCLauncher.Profiling", "src\dotMCLauncher.Profiling\dotMCLauncher.Profiling.csproj", "{39481F27-537E-4AE3-B58F-92E364535731}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "dotMCLauncher.Versioning", "src\dotMCLauncher.Versioning\dotMCLauncher.Versioning.csproj", "{E41644A8-2949-4CC3-B1B1-CEBF32B055A2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "dotMCLauncher.Versioning", "src\dotMCLauncher.Versioning\dotMCLauncher.Versioning.csproj", "{E41644A8-2949-4CC3-B1B1-CEBF32B055A2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "dotMCLauncher.Yggdrasil", "src\dotMCLauncher.Yggdrasil\dotMCLauncher.Yggdrasil.csproj", "{2C82A4FF-1672-48C6-A2A6-E9E30E8449D4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "dotMCLauncher.Yggdrasil", "src\dotMCLauncher.Yggdrasil\dotMCLauncher.Yggdrasil.csproj", "{2C82A4FF-1672-48C6-A2A6-E9E30E8449D4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "dotMCLauncher.Resourcing", "src\dotMCLauncher.Resourcing\dotMCLauncher.Resourcing.csproj", "{EA695878-5109-467B-91E1-FE86CEBD7A22}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "dotMCLauncher.Resourcing", "src\dotMCLauncher.Resourcing\dotMCLauncher.Resourcing.csproj", "{EA695878-5109-467B-91E1-FE86CEBD7A22}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "dotMCLauncher.Tests", "src\dotMCLauncher.Tests\dotMCLauncher.Tests.csproj", "{AF6A3003-A1DA-4B40-A513-DB021158D310}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "dotMCLauncher.Tests", "src\dotMCLauncher.Tests\dotMCLauncher.Tests.csproj", "{AF6A3003-A1DA-4B40-A513-DB021158D310}"
 	ProjectSection(ProjectDependencies) = postProject
 		{39481F27-537E-4AE3-B58F-92E364535731} = {39481F27-537E-4AE3-B58F-92E364535731}
 		{EA695878-5109-467B-91E1-FE86CEBD7A22} = {EA695878-5109-467B-91E1-FE86CEBD7A22}
@@ -51,17 +51,5 @@ Global
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {AD428E5B-04A1-48D1-9926-E186BC8193E4}
-	EndGlobalSection
-	GlobalSection(AutomaticVersions) = postSolution
-		UpdateAssemblyVersion = True
-		UpdateAssemblyFileVersion = True
-		UpdateAssemblyInfoVersion = True
-		ShouldCreateLogs = True
-		AssemblyVersionSettings = None.NoneWithAutoReset.NoneWithAutoReset.Increment
-		AssemblyFileVersionSettings = None.NoneWithAutoReset.NoneWithAutoReset.Increment
-		AssemblyInfoVersionSettings = None.NoneWithAutoReset.NoneWithAutoReset.Increment
-		UpdatePackageVersion = False
-		AssemblyInfoVersionType = SettingsVersion
-		InheritWinAppVersionFrom = None
 	EndGlobalSection
 EndGlobal
