@@ -4,11 +4,11 @@
 	  <Description>A library for working with Mojang's Yggdrasil authentication service.</Description>
     <Company>Igor Popov</Company>
     <Copyright>Copyright Igor Popov © 2019</Copyright>
-    <AssemblyVersion>21.11.7.54</AssemblyVersion>
-    <FileVersion>21.11.7.54</FileVersion>
+    <AssemblyVersion>21.11.8.58</AssemblyVersion>
+    <FileVersion>21.11.8.58</FileVersion>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
   </ItemGroup>
 </Project>

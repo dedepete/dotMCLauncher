@@ -18,10 +18,6 @@ namespace dotMCLauncher.Versioning
             foreach (Argument argument in Arguments) {
                 switch (argument.Type) {
                     case ArgumentType.SINGLE:
-                        if (!(argument is SingleArgument singleArgument)) {
-                            break;
-                        }
-
                         break;
                     case ArgumentType.MULTIPLE:
                         if (!(argument is MultipleArgument multipleArgument)) {

@@ -22,7 +22,6 @@ namespace dotMCLauncher.Versioning
 
         public bool IsAllowed(RuleConditions conditions) => _rules?.CheckIfAllowed(conditions) ?? true;
 
-        [JsonProperty("value", ObjectCreationHandling = ObjectCreationHandling.Replace)]
         public override JToken Value
         {
             get {

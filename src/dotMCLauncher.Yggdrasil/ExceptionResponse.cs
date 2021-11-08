@@ -2,8 +2,8 @@
 {
     public abstract class ExceptionResponse
     {
-        public string Error { get; set; }
-        public string ErrorMessage { get; set; }
-        public string Cause { get; set; }
+        public string Error { get; protected set; }
+        public string ErrorMessage { get; protected set; }
+        public string Cause { get; protected set; }
     }
 }

@@ -4,11 +4,11 @@
 	  <Description>A library for manipulating with Minecraft Launcher's version manifests.</Description>
     <Company>Igor Popov</Company>
     <Copyright>Copyright Igor Popov © 2019</Copyright>
-    <AssemblyVersion>21.11.7.95</AssemblyVersion>
-    <FileVersion>21.11.7.95</FileVersion>
+    <AssemblyVersion>21.11.8.99</AssemblyVersion>
+    <FileVersion>21.11.8.99</FileVersion>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
   </ItemGroup>
 </Project>
