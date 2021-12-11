@@ -123,6 +123,11 @@ namespace dotMCLauncher.Versioning
         /// </summary>
         public int ComplianceLevel { get; set; }
 
+        // <summary>
+        // Information about Log4j log configuration.
+        // </summary>
+        public Dictionary<string, LoggingEntry> Logging { get; set; }
+
         /// <summary>
         /// Parent's manifest.
         /// </summary>
