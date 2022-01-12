@@ -1,13 +1,13 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <PackageId>dotMCLauncher.Profiling</PackageId>
-    <Title>dotMCLauncher.Profiling</Title>
+    <PackageId>dotMCLauncher.Resourcing</PackageId>
+    <Title>dotMCLauncher.Resourcing</Title>
 	  <Description>A library that eases working with Minecraft assets indexes.</Description>
     <Company>Igor Popov</Company>
     <Copyright>Copyright Igor Popov © 2019</Copyright>
-    <AssemblyVersion>22.1.12.15</AssemblyVersion>
-    <FileVersion>22.1.12.15</FileVersion>
+    <AssemblyVersion>22.1.12.16</AssemblyVersion>
+    <FileVersion>22.1.12.16</FileVersion>
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
     <RepositoryType>git</RepositoryType>
     <PackageLicenseFile>LICENSE.md</PackageLicenseFile>
