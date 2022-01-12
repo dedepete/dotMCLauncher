@@ -1,14 +1,32 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-	  <Description>A library for manipulating with Minecraft Launcher's asset indexes.</Description>
+    <PackageId>dotMCLauncher.Profiling</PackageId>
+    <Title>dotMCLauncher.Profiling</Title>
+	  <Description>A library that eases working with Minecraft assets indexes.</Description>
     <Company>Igor Popov</Company>
     <Copyright>Copyright Igor Popov © 2019</Copyright>
-    <AssemblyVersion>21.11.8.12</AssemblyVersion>
-    <FileVersion>21.11.8.12</FileVersion>
+    <AssemblyVersion>22.1.12.15</AssemblyVersion>
+    <FileVersion>22.1.12.15</FileVersion>
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+    <RepositoryType>git</RepositoryType>
+    <PackageLicenseFile>LICENSE.md</PackageLicenseFile>
+    <PackageProjectUrl>https://github.com/dedepete/dotMCLauncher</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/dedepete/dotMCLauncher</RepositoryUrl>
+    <PackageTags>minecraft, minecraft-launcher</PackageTags>
+    <Authors>Igor Popov</Authors>
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+    <EmbedUntrackedSources>true</EmbedUntrackedSources>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\LICENSE.md">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
   </ItemGroup>
 </Project>
