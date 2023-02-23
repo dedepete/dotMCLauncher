@@ -6,8 +6,8 @@
 	  <Description>A library that eases working with Minecraft Launcher profiles.</Description>
     <Company>Igor Popov</Company>
     <Copyright>Copyright Igor Popov © 2020</Copyright>
-    <AssemblyVersion>22.1.12.69</AssemblyVersion>
-    <FileVersion>22.1.12.69</FileVersion>
+    <AssemblyVersion>23.2.23.70</AssemblyVersion>
+    <FileVersion>23.2.23.70</FileVersion>
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
     <RepositoryType>git</RepositoryType>
     <PackageLicenseFile>LICENSE.md</PackageLicenseFile>
@@ -21,7 +21,7 @@
     <EmbedUntrackedSources>true</EmbedUntrackedSources>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.2" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\LICENSE.md">
