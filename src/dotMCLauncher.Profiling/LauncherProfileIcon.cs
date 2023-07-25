@@ -393,7 +393,7 @@
                 case Icon.WOOL:
                     return "Wool";
                 default:
-                    return null;
+                    return "Furnace";
             }
         }
     }
