@@ -128,8 +128,8 @@
                     return Icon.END_STONE;
                 case "Farmland":
                     return Icon.FARMLAND;
-                case Icon.FURNACE:
-                    return "Furnace";
+                case "Furnace":
+                    return Icon.FURNACE;
                 case "Furnace_On":
                     return Icon.FURNACE_ON;
                 case "Glass":
