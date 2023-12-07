@@ -30,6 +30,7 @@ namespace dotMCLauncher.Tests.Versioning
 
         [TestCase("x86")]
         [TestCase("x64")]
+        [TestCase("arm64")]
         [TestCase(null)]
         public void GettingLibraries(string architecture)
         {
@@ -39,10 +40,9 @@ namespace dotMCLauncher.Tests.Versioning
                 }
             };
 
-            List<Library> list = VersionManifest.Libraries.Where(lib =>
-                                                                     lib.IsAllowed(conditions) ||
+            List<Library> list = VersionManifest.Libraries.Where(lib => (lib.IsAllowed(conditions) && !lib.IsNatives) ||
                                                                      lib.IsAllowed(conditions) &&
-                                                                     lib.IsNativesFor(Platform)).ToList();
+                                                                     lib.IsNativesFor(LibraryPlatform.GetOperatingSystem(Platform == "osx" ? "macos" : Platform), LibraryPlatform.GetArchitecture(architecture))).ToList();
 
             foreach (Library library in list) {
                 Console.WriteLine($"{library.Name} IsNatives: {library.IsNatives}");
@@ -56,6 +56,7 @@ namespace dotMCLauncher.Tests.Versioning
 
         [TestCase("x86")]
         [TestCase("x64")]
+        [TestCase("arm64")]
         [TestCase(null)]
         public void BuildingArguments(string architecture)
         {
