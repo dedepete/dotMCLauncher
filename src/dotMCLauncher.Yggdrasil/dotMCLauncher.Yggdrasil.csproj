@@ -6,8 +6,8 @@
 	  <Description>A library for working with Mojang's Yggdrasil authentication service.</Description>
     <Company>Igor Popov</Company>
     <Copyright>Copyright Igor Popov © 2019</Copyright>
-    <AssemblyVersion>23.12.10.63</AssemblyVersion>
-    <FileVersion>23.12.10.63</FileVersion>
+    <AssemblyVersion>23.12.10.66</AssemblyVersion>
+    <FileVersion>23.12.10.66</FileVersion>
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
     <RepositoryType>git</RepositoryType>
     <PackageLicenseFile>LICENSE.md</PackageLicenseFile>
@@ -18,8 +18,8 @@
     <IncludeSymbols>true</IncludeSymbols>
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
     <EmbedUntrackedSources>true</EmbedUntrackedSources>
-    <Version>1.0.1</Version>
-    <PackageReleaseNotes>https://github.com/dedepete/dotMCLauncher/commits/23.02.23</PackageReleaseNotes>
+    <Version>1.0.2</Version>
+    <PackageReleaseNotes>https://github.com/dedepete/dotMCLauncher/commits/23.12.10</PackageReleaseNotes>
   </PropertyGroup>
 
   <ItemGroup>
