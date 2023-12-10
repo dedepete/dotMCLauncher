@@ -173,10 +173,17 @@ namespace dotMCLauncher.Versioning
                 ver.InheritableVersionManifest =
                     ParseFromDirectory(
                         new DirectoryInfo(Path.Combine(pathToDirectory.Parent?.FullName ?? throw new DirectoryNotFoundException(), ver.InheritsFrom)));
-                ver.Libraries.AddRange(ver.InheritableVersionManifest.Libraries.Where(
-                    lib => ver.Libraries.All(
-                        lib2 => $"{lib.Name.GroupId}:{lib.Name.ArtifactId}:{lib.Name.Classifier}" !=
-                                $"{lib2.Name.GroupId}:{lib2.Name.ArtifactId}:{lib2.Name.Classifier}")));
+                foreach (Library lib in ver.InheritableVersionManifest.Libraries) {
+                    if (ver.Libraries.Any(lib2 => lib.Name.GroupId == lib2.Name.GroupId
+                                                  && lib.Name.ArtifactId == lib2.Name.ArtifactId
+                                                  && lib.Name.Classifier == lib2.Name.Classifier
+                                                  && lib.IsNatives == lib2.IsNatives
+                                                  && lib.Rules == lib2.Rules)) {
+                        continue;
+                    }
+
+                    ver.Libraries.Add(lib);
+                }
             } catch (Exception exception) {
                 throw new VersionManifestParentParseException(exception, ver.VersionId, ver.InheritsFrom);
             }

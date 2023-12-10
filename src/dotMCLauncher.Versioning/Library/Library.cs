@@ -33,9 +33,9 @@ namespace dotMCLauncher.Versioning
         public Dictionary<string, string> Natives { get; set; }
 
         [JsonProperty("rules")]
-        private RuleCollection _rules { get; set; }
+        public RuleCollection Rules { get; set; }
 
-        public bool IsAllowed(RuleConditions conditions) => _rules?.CheckIfAllowed(conditions) ?? true;
+        public bool IsAllowed(RuleConditions conditions) => Rules?.CheckIfAllowed(conditions) ?? true;
 
         /// <summary>
         /// Returns true, if contains any natives.
