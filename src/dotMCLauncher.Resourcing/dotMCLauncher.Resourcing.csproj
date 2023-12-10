@@ -6,8 +6,8 @@
 	  <Description>A library that eases working with Minecraft assets indexes.</Description>
     <Company>Igor Popov</Company>
     <Copyright>Copyright Igor Popov © 2019</Copyright>
-    <AssemblyVersion>23.2.23.17</AssemblyVersion>
-    <FileVersion>23.2.23.17</FileVersion>
+    <AssemblyVersion>23.12.10.18</AssemblyVersion>
+    <FileVersion>23.12.10.18</FileVersion>
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
     <RepositoryType>git</RepositoryType>
     <PackageLicenseFile>LICENSE.md</PackageLicenseFile>
@@ -23,7 +23,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.2" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\LICENSE.md">

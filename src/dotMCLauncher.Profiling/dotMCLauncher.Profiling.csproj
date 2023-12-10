@@ -6,8 +6,8 @@
 	  <Description>A library that eases working with Minecraft Launcher profiles.</Description>
     <Company>Igor Popov</Company>
     <Copyright>Copyright Igor Popov © 2020</Copyright>
-    <AssemblyVersion>23.2.23.70</AssemblyVersion>
-    <FileVersion>23.2.23.70</FileVersion>
+    <AssemblyVersion>23.12.10.71</AssemblyVersion>
+    <FileVersion>23.12.10.71</FileVersion>
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
     <RepositoryType>git</RepositoryType>
     <PackageLicenseFile>LICENSE.md</PackageLicenseFile>
@@ -23,7 +23,7 @@
     <PackageReleaseNotes>https://github.com/dedepete/dotMCLauncher/commits/23.02.23</PackageReleaseNotes>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.2" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\LICENSE.md">
