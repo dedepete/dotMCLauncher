@@ -39,7 +39,7 @@ namespace dotMCLauncher.Tests.Yggdrasil
 
         [Test, Order(1)]
         public void ValidateInvalidTokens()
-            => Assert.False(Validate("foo", "bar"));
+            => Assert.That(Validate("foo", "bar"), Is.False);
 
         [Test, Order(2)]
         public void AuthenticateAndValidate()
@@ -55,7 +55,7 @@ namespace dotMCLauncher.Tests.Yggdrasil
             Authenticate(Configuration["Yggdrasil:username"], Configuration["Yggdrasil:password"],
                 ref authenticateRequest);
 
-            Assert.True(Validate(authenticateRequest.AccessToken, authenticateRequest.ClientToken),
+            Assert.That(Validate(authenticateRequest.AccessToken, authenticateRequest.ClientToken),
                 $"Error: {authenticateRequest.Error}\nMessage: {authenticateRequest.ErrorMessage}\nCaused by: {authenticateRequest.Cause}");
             _accessToken = authenticateRequest.AccessToken;
             _clientToken = authenticateRequest.ClientToken;
@@ -68,7 +68,7 @@ namespace dotMCLauncher.Tests.Yggdrasil
 
             Authenticate("foo@example.example", "bar", ref authenticateRequest);
 
-            Assert.False(authenticateRequest.WasSuccessful);
+            Assert.That(authenticateRequest.WasSuccessful, Is.False);
         }
 
         [Test, Order(3)]
@@ -83,7 +83,7 @@ namespace dotMCLauncher.Tests.Yggdrasil
 
             Refresh(_accessToken, _clientToken, ref refreshRequest);
 
-            Assert.True(Validate(refreshRequest.AccessToken, refreshRequest.ClientToken),
+            Assert.That(Validate(refreshRequest.AccessToken, refreshRequest.ClientToken),
                 $"Error: {refreshRequest.Error}\nMessage: {refreshRequest.ErrorMessage}\nCaused by: {refreshRequest.Cause}");
 
             _accessToken = refreshRequest.AccessToken;
@@ -97,7 +97,7 @@ namespace dotMCLauncher.Tests.Yggdrasil
 
             Refresh("foo", "bar", ref refreshRequest);
 
-            Assert.False(refreshRequest.WasSuccessful);
+            Assert.That(refreshRequest.WasSuccessful, Is.False);
         }
 
         [Test, Order(4)]
@@ -107,13 +107,13 @@ namespace dotMCLauncher.Tests.Yggdrasil
                 AuthenticateAndValidate();
             }
 
-            Assert.True(Invalidate(_accessToken, _clientToken));
+            Assert.That(Invalidate(_accessToken, _clientToken));
         }
 
         [Test]
         [Ignore("For some reason returns True even for invalid tokens.")]
         public void InvalidateInvalidTokens()
-            => Assert.False(Invalidate("foo", "bar"));
+            => Assert.That(Invalidate("foo", "bar"), Is.False);
 
         [Test]
         public void Signout()
@@ -129,7 +129,7 @@ namespace dotMCLauncher.Tests.Yggdrasil
 
             signoutRequest = signoutRequest.SendRequest() as SignoutRequest;
 
-            Assert.True(signoutRequest?.WasSuccessful,
+            Assert.That(signoutRequest?.WasSuccessful, Is.True,
                 $"Error: {signoutRequest?.Error}\nMessage: {signoutRequest?.ErrorMessage}\nCaused by: {signoutRequest?.Cause}");
         }
 
@@ -140,7 +140,7 @@ namespace dotMCLauncher.Tests.Yggdrasil
 
             signoutRequest = signoutRequest.SendRequest() as SignoutRequest;
 
-            Assert.False(signoutRequest?.WasSuccessful);
+            Assert.That(signoutRequest?.WasSuccessful, Is.False);
         }
 
         [Test]
@@ -150,7 +150,7 @@ namespace dotMCLauncher.Tests.Yggdrasil
 
             usernameRequest = usernameRequest.SendRequest() as UsernameRequest;
 
-            Assert.AreEqual("dedepete", usernameRequest?.Username);
+            Assert.That("dedepete", Is.EqualTo(usernameRequest?.Username));
         }
 
         [Test]
@@ -160,7 +160,7 @@ namespace dotMCLauncher.Tests.Yggdrasil
 
             usernameRequest = usernameRequest.SendRequest() as UsernameRequest;
 
-            Assert.False(usernameRequest?.WasSuccessful);
+            Assert.That(usernameRequest?.WasSuccessful, Is.False);
         }
 
         private static bool Invalidate(string accessToken, string clientToken)
