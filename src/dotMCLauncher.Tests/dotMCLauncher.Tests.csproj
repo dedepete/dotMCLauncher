@@ -4,8 +4,8 @@
     <Description>A pack of NUnit tests to taste libraries.</Description>
     <Company>Igor Popov</Company>
     <Copyright>Copyright Igor Popov © 2020</Copyright>
-    <AssemblyVersion>23.2.23.167</AssemblyVersion>
-    <FileVersion>23.2.23.167</FileVersion>
+    <AssemblyVersion>23.12.7.186</AssemblyVersion>
+    <FileVersion>23.12.7.186</FileVersion>
     <UserSecretsId>d16634c5-938e-4a63-b980-076e03708d72</UserSecretsId>
   </PropertyGroup>
 

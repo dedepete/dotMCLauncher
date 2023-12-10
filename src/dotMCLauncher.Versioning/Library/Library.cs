@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Newtonsoft.Json;
 
 namespace dotMCLauncher.Versioning
@@ -9,7 +10,12 @@ namespace dotMCLauncher.Versioning
         /// Library's name.
         /// </summary>
         [JsonProperty("name")]
-        public string Name { get; set; }
+        private string _name { get => Name.ToString();
+            set => Name = new LibraryMavenName(value);
+        }
+
+        [JsonIgnore]
+        public LibraryMavenName Name { get; set; }
 
         /// <summary>
         /// Library's download info.
@@ -34,26 +40,70 @@ namespace dotMCLauncher.Versioning
         /// <summary>
         /// Returns true, if contains any natives.
         /// </summary>
-        public bool IsNatives => Natives != null;
+        public bool IsNatives => Natives != null || (Name.Classifier?.Contains("natives") ?? false);
 
         /// <summary>
         /// Returns true, if contains natives for specified operating system.
         /// </summary>
+        [Obsolete("The detection of natives has been updated and now requires platform architecture to be specified. This overload will be removed in next release.\nUse `IsNativesFor(LibraryPlatform.OperatingSystem, LibraryPlatform.Architecture)` instead.")]
         public bool IsNativesFor(string operatingSystem)
             => IsNatives && Natives.ContainsKey(operatingSystem);
+
+        /// <summary>
+        /// Returns true, if contains natives for specified platform.
+        /// </summary>
+        public bool IsNativesFor(LibraryPlatform.OperatingSystem operatingSystem, LibraryPlatform.Architecture architecture)
+        {
+            if (!IsNatives || operatingSystem == LibraryPlatform.OperatingSystem.UNKNOWN) {
+                return false;
+            }
+
+            if (!(Name.Classifier?.Contains("natives") ?? false)) {
+                return Natives.ContainsKey(operatingSystem == LibraryPlatform.OperatingSystem.MACOS
+                    ? "osx"
+                    : LibraryPlatform.GetString(operatingSystem));
+            }
+
+            string[] classifier = Name.Classifier.Split('-');
+            if (classifier[1] != LibraryPlatform.GetString(operatingSystem)) {
+                return false;
+            }
+
+            if (classifier.Length > 2) {
+                return classifier[2] == LibraryPlatform.GetString(architecture);
+            }
+
+            return true;
+        }
 
         public string GetPath(string operatingSystem = "windows")
             => GetPath(operatingSystem, false);
 
+        public string GetPath(LibraryPlatform.OperatingSystem operatingSystem, LibraryPlatform.Architecture architecture)
+            => GetPath(operatingSystem == LibraryPlatform.OperatingSystem.MACOS
+                ? "osx"
+                : LibraryPlatform.GetString(operatingSystem), architecture != LibraryPlatform.Architecture.X86);
+
         public string GetPath(string operatingSystem, bool is64BitArchitecture)
         {
-            string[] s = Name.Split(':');
-            return string.Format(@"{0}\{1}\{2}\{1}-{2}" +
-                                 (IsNativesFor(operatingSystem)
-                                     ? "-" + Natives[operatingSystem]
-                                           .Replace("${arch}", is64BitArchitecture ? "64" : "32")
-                                     : string.Empty) + ".jar",
-                s[0].Replace('.', '\\'), s[1], s[2]);
+            string classifier = Name.Classifier ?? (Natives?.ContainsKey(operatingSystem) ?? false
+                ? Natives[operatingSystem]
+                : null);
+
+            return string.Format(@"{0}\{1}\{2}\{1}-{2}{3}.{4}",
+                Name.GroupId.Replace('.', '\\'), Name.ArtifactId, Name.Version,
+                !string.IsNullOrWhiteSpace(classifier)
+                    ? "-" + classifier.Replace("${arch}", is64BitArchitecture ? "64" : "32")
+                    : string.Empty,
+                Name.Type ?? "jar");
+
+            //string[] s = Name.Split(':');
+            //return string.Format(@"{0}\{1}\{2}\{1}-{2}" +
+            //                     (IsNativesFor(operatingSystem)
+            //                         ? "-" + Natives[operatingSystem]
+            //                               .Replace("${arch}", is64BitArchitecture ? "64" : "32")
+            //                         : string.Empty) + ".jar",
+            //    s[0].Replace('.', '\\'), s[1], s[2]);
         }
 
         public IEnumerable<DownloadEntry> GetDownloadsEntries(string operatingSystem = "windows")
@@ -69,7 +119,7 @@ namespace dotMCLauncher.Versioning
 
             if (DownloadInfo != null) {
                 foreach (DownloadEntry downloadEntry in DownloadInfo.GetDownloadsEntries(
-                    IsNatives && operatingSystem != null && Natives.ContainsKey(operatingSystem)
+                    IsNatives && operatingSystem != null && (Natives?.ContainsKey(operatingSystem) ?? false)
                         ? Natives[operatingSystem].Replace("${arch}", is64BitArchitecture ? "64" : "32")
                         : null)) {
                     if (downloadEntry.Path == null) {
